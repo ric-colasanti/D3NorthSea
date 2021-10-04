@@ -7,19 +7,14 @@ var mainfun = function(){
 }
 
 var d3refresh = function(){
-    var svg = d3.select("#chart");
+    var svg = d3.select("#chart").attr("width",500);
 
     var circle = svg.selectAll("circle")
         .data([32, 57, 112, 293,90]);
-    console.log("here")
-    var circleEnter = circle.enter().append("circle");
-
-    circleEnter.attr("cy", 60);
-    circleEnter.attr("cx", function (d, i) {
-        console.log(i)
-        return i * 50 + 30;
-    });
-    circleEnter.attr("r", function (d) {
-        return Math.sqrt(d);
-    });
+    var circleEnter = circle.enter()
+    .append("circle")
+    .attr("cy", 60)
+    .attr("fill","orange")
+    .attr("cx", (d, i) =>i * 50 + 35) // note the varable name d ca be replaced with any vriable name
+    .attr("r", d => Math.sqrt(f));
 }

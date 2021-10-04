@@ -16,5 +16,5 @@ var d3refresh = function(){
     .attr("cy", 60)
     .attr("fill","orange")
     .attr("cx", (d, i) =>i * 50 + 35) // note the varable name d ca be replaced with any vriable name
-    .attr("r", d => Math.sqrt(f));
+    .attr("r", d => Math.sqrt(d));
 }

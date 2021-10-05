@@ -40,4 +40,10 @@ var d3refresh = function () {
         testData.push(randomNum)
         update(svg,testData)
     }
+    document.getElementById("btnChange").onclick = function(){
+        randomNum = Math.round(Math.random() * 501);  // 0 to 100
+        console.log(randomNum);
+        testData[1] = randomNum
+        update(svg,testData)
+    }
 }

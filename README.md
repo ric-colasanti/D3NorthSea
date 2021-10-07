@@ -1,3 +1,3 @@
 # D3NorthSea
 North Sea Oceanographic Data Visualisation
-v0.06
+v0.07

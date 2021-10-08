@@ -1,10 +1,267 @@
-<div id="list" ></div>
+<br>
+
+
+<h2>The joy of D3</h2>
+<p>
+    On this page we are demonstrating: d3 data binding, data update, transitioning , fixed element and positional
+    triggering. We are using the HTML element li (list) inplace of a SVG for simplicity of explanation
+</p>
+
+<div class="row">
+    <div class="col-sm-4">
+        <div id="listarea" style="position: fixed;">
+            <h5>D3 test list</h5>
+            <div id="list"></div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="bgTextBox">
+            <h4>Data binding</h4>
+            <p>D3 is a graphics library that binds data structures to HTML DOM (Document Object Model) objects.
+                Either scroll down or press the button below to load the data.</p>
+            <button type="button" class="btn btn-primary" id="btnLoad">Load</button>
+            <br>
+            <br>
+            <p> The data to be loaded is structured
+                [[0,"First"],[1,"Second"],[2,"Third"],[3,"Fourth"],[4,"Fifth"],[5,"Sixth"]] The first element is the id
+                D3 will bind specific data to HTML list elements with this line</p>
+            <pre>
+        <code>
+    var list = d3Select.selectAll("li").data(data,d=>d[0]);
+        </code>
+        </pre>
+            <p>The javascript that loads the data and format its look and behaviour is:</p>
+            <pre>
+        <code>
+    var list = d3Select.selectAll("li").data(data,d=>d[0]);
+    list.join(
+        enter => 
+        enter.append("li")
+        .text(d=>d[1])
+        .style("color","orange"),
+    )
+        </code>
+        </pre>
+
+        </div>
+        <br>
+        <br>
+        <div class="bgTextBox">
+            <h4>Updating</h4>
+<p>
+    The D3 data graphic will change when the data that is bound to it changes. Scroll up, or click the button below to add a data element to the third position
+
+
+
+</p>
+            <button type="button" class="btn btn-primary" id="btnAdd">Add Data</button>
+            <br>
+            <br>
+            <br>
+            <p>Scroll up again or click the button below to change the value of the 4th element</p>
+            <button type="button" class="btn btn-primary" id="btnChange">Change Data</button>
+            <br>
+            <br>
+            <br>
+            <p>The javascript that changes the bound data  is:</p>
+            <pre>
+        <code>
+    list.join(
+        enter => 
+        enter.append("li")
+        .text(d=>d[1])
+        .style("color","orange"),
+        update =>
+        update.text(d=>d[1]),
+    )
+        </code>
+    </pre>
+        </div>
+        <br>
+        <br>
+        <div class="bgTextBox">
+            <h4>Removing</h4>
+            <p>Scroll up again or click the button below to remove the second element</p>
+            <button type="button" class="btn btn-primary" id="btnRemove">Remove Data</button>
+            <br>
+            <br>
+            <br>
+            <p>The javascript that removes the bound data  is:</p>
+            <pre>
+        <code>
+    list.join(
+        enter => 
+        enter.append("li")
+        .text(d=>d[1])
+        .style("color","orange"),
+        update =>
+        update.text(d=>d[1]),
+    )
+        </code>
+    </pre>
+    <br>
+    <h4> scroll back to the top to reset the graphic</h4>
+        </div>
+
+    <br>
+    <br>
+    <div class="bgTextBox">
+        <h4>Hilighting</h4>
+        <p>Scroll up again or click the button below to change view and hilight a single element</p>
+        <button type="button" class="btn btn-primary" id="btnHighlight">Hilight Data</button>
+        <br>
+        <br>
+        <br>
+        <p>The javascript that changes the apperance of all of the  the bound data  is:</p>
+        <pre>
+    <code>
+var changeAllColors = function () {
+    var d3Select = d3.select("#list");
+    console.log("change ", data)
+    var list = d3Select.selectAll("li").data(data, d => d[0]);
+    list.transition().duration(2000).style("color", function (d) {
+        if (d[0] == 1) {
+            return "blue"
+        }
+        return "rgba(190,190,190, 0.3)";
+    })
+}
+    </code>
+</pre>
+<br>
+<h4> scroll back to the top to reset the graphic</h4>
+    </div>
+
 <br>
 <br>
-<button type="button" class="btn btn-primary" id = "btnRemove">Remove</button>
-<br>
-<br>
-<button type="button" class="btn btn-primary" id = "btnAdd">Add</button>
-<br>
-<br>
-<button type="button" class="btn btn-primary" id = "btnChange">Change Data</button>
+    <div class="bgTextBox">
+        <h4>Transitioning and triggering</h4>
+
+        <p>The compleate javascript for this is:</p>
+        <pre>
+    <code>
+
+        var d3joy = function () {
+            var data = [
+                [0, "First"],
+                [1, "Second"],
+                [2, "Third"],
+                [3, "Fourth"],
+                [4, "Fifth"],
+                [5, "Sixth"]
+            ];
+            console.log("d3joy")
+            counter = 6
+            var changed = false;
+            var added = false;
+            var loaded = false
+            var removed = false
+            var reset = false
+            var update = function () {
+                var d3Select = d3.select("#list");
+                console.log("update ", data)
+                var list = d3Select.selectAll("li").data(data, d => d[0]);
+                list.join(
+                    enter =>
+                    enter.append("li")
+                    .text(d => d[1])
+                    .on("click", function () {
+                        this.toggle = !this.toggle; // declared variable setting it to true
+                        d3.select(this)
+                            .transition().duration(1000)
+                            .style("color", this.toggle ? "purple" : "orange");
+                    })
+                    .style("color", "rgba(255,255,255, 0.0)")
+                    .transition().duration(1000)
+                    .style("color", "orange"),
+                    update =>
+                    update.text(d => d[1]),
+                    exit =>
+                    exit
+                    .transition().duration(1000)
+                    .style("color", "rgba(255,255,255, 0.0)")
+                    .remove()
+                )
+            }
+        
+            var changeAllColors = function () {
+                var d3Select = d3.select("#list");
+                console.log("change ", data)
+                var list = d3Select.selectAll("li").data(data, d => d[0]);
+                list.transition().duration(2000).style("color", function (d) {
+                    if (d[0] == 1) {
+                        return "blue"
+                    }
+                    return "rgba(190,190,190, 0.3)";
+                })
+            }
+            document.getElementById("btnLoad").onclick = function () {
+                loaded = true;
+                update();
+            }
+            document.getElementById("btnRemove").onclick = function () {
+                data.splice(1, 1);
+                update();
+            }
+            document.getElementById("btnChange").onclick = function () {
+        
+                data[3][1] = "THIS has Changed";
+                update()
+                changed = true
+            }
+            document.getElementById("btnAdd").onclick = function () {
+                data.splice(2, 0, [counter, "New at third pos"]);
+                counter++;
+                update();
+            }
+        
+            window.addEventListener("scroll", function () {
+                loadBtn = document.getElementById("btnLoad").getBoundingClientRect().top
+                addBtn = document.getElementById("btnAdd").getBoundingClientRect().top
+                changeBtn = document.getElementById("btnChange").getBoundingClientRect().top
+                removeBtn = document.getElementById("btnRemove").getBoundingClientRect().top
+                xList = document.getElementById("list").getBoundingClientRect().top
+                if ((loadBtn <= xList) && (!loaded)) {
+                    update();
+                    loaded = true
+                    reset = false
+                }
+                if ((loadBtn > xList) && (!reset)) {
+                    data = [
+                        [0, "First"],
+                        [1, "Second"],
+                        [2, "Third"],
+                        [3, "Fourth"],
+                        [4, "Fifth"],
+                        [5, "Sixth"]
+                    ];
+                    update();
+                    loaded = false
+                    added = false
+                    changed = false
+                    removed = false
+                    reset = true
+                }
+                if ((addBtn <= xList) && (!added)) {
+                    data.splice(2, 0, [counter, "New at third pos"]);
+                    counter++;
+                    added = true
+                    update();
+                }
+                if ((changeBtn <= xList) && (!changed)) {
+                    data[3][1] = "THIS has Changed";
+                    changed = true;
+                    update();
+                }
+                if ((removeBtn <= xList) && (!removed)) {
+                    data.splice(1, 1);
+                    update();
+                    removed = true
+                }  
+            });
+        }
+    </code>
+</pre>
+    </div>
+</div>
+</div>

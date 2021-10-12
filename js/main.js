@@ -7,7 +7,11 @@ var mainfun = function () {
 }
 
 var d3refresh = function () {
-    var testData = [{"id":1,"value":32},{"id":2,"value":29},{"id":3,"value":19},{"id":4,"value":44},{"id":5,"value":28}]
+    var testData = []
+    for (let i = 0; i <5; i++) {
+        testData.push({"id":i,"value":Math.floor(Math.random() * 50), "xPos" : Math.floor(Math.random() * 400), "yPos" : Math.floor(Math.random() * 400)});   
+    } 
+    console.log(testData)
     var svg = d3.select("#chart");
     width = parseInt(svg.style("width"));
     height = parseInt(svg.style("height"))
@@ -15,30 +19,34 @@ var d3refresh = function () {
 
 
 
-    var update = function (svg, gData) {
-
-        console.log("here", testData)
+    var update = function (svg, gData,d=1000) {
+        console.log("here", gData)
         const circles = svg.selectAll("circle").data(testData, (d) => d.id);
         circles.enter().append("circle")
-            .attr("cy", 60)
-            .attr("cx", (d, i) => i * 50 + 35) // note the varable name d ca be replaced with any vriable name
-            .attr("fill", "orange")
-        .merge(circles)
-            .attr("cx", (d, i) => i * 50 + 35) // note the varable name d ca be replaced with any vriable name
-            .attr("r", d => Math.sqrt(d.value*4))
+            .attr("cy", d => d.xPos)
+            .attr("cx", d=> d.yPos)
             .on("click", function () {
                 console.log("clicked")
                 d3.select(this).attr("fill", "green")
-            });
+            })
+            .attr("fill", "orange")
+            .attr("stroke","black")
+            .transition().duration(d)
+            .attr("r",d => d.value)
+        circles.merge(circles)
+        .transition().duration(d)
+        .attr("cy", d => d.xPos)
+        .attr("cx", d=> d.yPos)
+        .attr("r",d => d.value)
+         // note the varable name d ca be replaced with any vriable name
         circles.exit()
             .transition()
-            .duration(750)
+            .duration(d)
             .attr("r", 0)
             .remove();
     }
-    update(svg, testData)
+    update(svg, testData,0)
     document.getElementById("btnRemove").onclick = function () {
-        //testData.pop()
         testData.splice(3,1)
         console.log(testData)
         update(svg, testData)
@@ -47,12 +55,14 @@ var d3refresh = function () {
         randomNum = Math.round(Math.random() * 50); // 0 to 100
         console.log(randomNum);
         counter++
-        testData.push({"id":counter, "value":randomNum})
+        testData.push({"id":counter,"value":Math.floor(Math.random() * 50), "xPos" : Math.floor(Math.random() * 400), "yPos" : Math.floor(Math.random() * 400)})
         update(svg, testData)
     }
     document.getElementById("btnChange").onclick = function () {
-        randomNum = Math.round(Math.random() * 50); // 0 to 100
-        testData[1].value = randomNum
+        testData.forEach(function(d){
+            d.xPos = Math.floor(Math.random() * 400);
+            d.yPos = Math.floor(Math.random() * 400);
+        })
         update(svg, testData)
     }
 }
@@ -183,7 +193,7 @@ var d3joy = function () {
             update();
             removed = true
         }        
-        if ((hightlightBtn <= xList) && (!hilighted)) {
+        if ((hightlightBtn <= xList) && (!hilighted)) {width
             changeAllColors();
             hilighted = true
         }  

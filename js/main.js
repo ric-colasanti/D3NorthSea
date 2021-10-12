@@ -7,58 +7,53 @@ var mainfun = function () {
 }
 
 var d3refresh = function () {
-    var testData = [32, 57, 112, 293, 90]
+    var testData = [{"id":1,"value":32},{"id":2,"value":29},{"id":3,"value":19},{"id":4,"value":44},{"id":5,"value":28}]
     var svg = d3.select("#chart");
     width = parseInt(svg.style("width"));
     height = parseInt(svg.style("height"))
+    counter = 5
 
 
 
     var update = function (svg, gData) {
 
         console.log("here", testData)
-        var circle = svg.selectAll("circle").data(testData);
-        circle.join(
-            enter =>
-            enter.append("circle")
+        const circles = svg.selectAll("circle").data(testData, (d) => d.id);
+        circles.enter().append("circle")
             .attr("cy", 60)
-            .attr("fill", "orange")
             .attr("cx", (d, i) => i * 50 + 35) // note the varable name d ca be replaced with any vriable name
-            .attr("r", d => Math.sqrt(d))
+            .attr("fill", "orange")
+        .merge(circles)
+            .attr("cx", (d, i) => i * 50 + 35) // note the varable name d ca be replaced with any vriable name
+            .attr("r", d => Math.sqrt(d.value*4))
             .on("click", function () {
                 console.log("clicked")
                 d3.select(this).attr("fill", "green")
-            }),
-            update =>
-            update
-            .transition()
-            .duration(750)
-            .attr("cx", (d, i) => i * 50 + 35) // note the varable name d can be replaced with any vriable name
-            .attr("r", d => Math.sqrt(d)),
-            exit =>
-            exit
+            });
+        circles.exit()
             .transition()
             .duration(750)
             .attr("r", 0)
-            .remove()
-        );
+            .remove();
     }
     update(svg, testData)
     document.getElementById("btnRemove").onclick = function () {
-        testData.pop()
+        //testData.pop()
+        testData.splice(3,1)
+        console.log(testData)
         update(svg, testData)
     }
     document.getElementById("btnAdd").onclick = function () {
-        randomNum = Math.round(Math.random() * 501); // 0 to 100
+        randomNum = Math.round(Math.random() * 50); // 0 to 100
         console.log(randomNum);
-        testData.push(randomNum)
+        counter++
+        testData.push({"id":counter, "value":randomNum})
         update(svg, testData)
     }
     document.getElementById("btnChange").onclick = function () {
-        randomNum = Math.round(Math.random() * 501); // 0 to 100
-        console.log(randomNum);
-        testData[1] = randomNum
-        update(svg, [300, 400])
+        randomNum = Math.round(Math.random() * 50); // 0 to 100
+        testData[1].value = randomNum
+        update(svg, testData)
     }
 }
 

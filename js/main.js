@@ -22,6 +22,11 @@ var d3refresh = function () {
     var update = function (svg, gData,d=1000) {
         console.log("here", gData)
         const circles = svg.selectAll("circle").data(testData, (d) => d.id);
+        circles.exit()
+        .transition()
+        .duration(d)
+        .attr("r", 0)
+        .remove();
         circles.enter().append("circle")
             .attr("cy", d => d.xPos)
             .attr("cx", d=> d.yPos)
@@ -39,11 +44,7 @@ var d3refresh = function () {
         .attr("cx", d=> d.yPos)
         .attr("r",d => d.value)
          // note the varable name d ca be replaced with any vriable name
-        circles.exit()
-            .transition()
-            .duration(d)
-            .attr("r", 0)
-            .remove();
+
     }
     update(svg, testData,0)
     document.getElementById("btnRemove").onclick = function () {

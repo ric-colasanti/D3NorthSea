@@ -23,35 +23,50 @@ var d3refresh = function () {
     counter = 5
 
 
-
-    var update = function (svg, gData, d = 1000) {
-        console.log("here", gData)
-        const circles = svg.selectAll("circle").data(testData, (d) => d.id);
-        circles.exit()
-            .transition()
-            .duration(d)
-            .attr("r", 0)
-            .remove();
-        circles.enter().append("circle")
-            .attr("cy", d => d.xPos)
-            .attr("cx", d => d.yPos)
-            .on("click", function () {
-                console.log("clicked")
-                d3.select(this).attr("fill", "green")
-            })
-            .attr("fill", "orange")
-            .attr("stroke", "black")
-            .transition().duration(d)
-            .attr("r", d => d.value)
-        circles.merge(circles)
-            .transition().duration(d)
-            .attr("cy", d => d.xPos)
-            .attr("cx", d => d.yPos)
-            .attr("r", d => d.value)
-        // note the varable name d ca be replaced with any vriable name
-
+    var enterFun = function(d3Array){
+        d3Array.enter()
+        .append("svg")
+        .append("g")
+        .attr("class","mydata")
+        .append("circle")
+        .attr("cy", d => d.xPos)
+        .attr("cx", d => d.yPos)
+        .on("click", function () {
+            console.log("clicked")
+            d3.select(this).attr("fill", "green")
+        })
+        .attr("fill", "tomato")
+        .attr("stroke", "black")
+        .transition().duration(1000)
+        .attr("r", d => d.value)
     }
-    update(svg, testData, 0)
+    var exitFun = function(d3Array){
+        d3Array.exit()
+        .select("circle")
+        .transition()
+        .duration(1000)
+        .attr("r", 0)
+        .remove()
+    }
+    var mergeFun = function(d3Array){
+        d3Array.merge(d3Array)
+        .select("circle")
+        .transition().duration(1000)
+        .attr("cy", d => d.xPos)
+        .attr("cx", d => d.yPos)
+        .attr("r", d => d.value)
+    }
+
+
+
+    var update = function (svg, gData) {
+        const circles = svg.selectAll("g").filter(".mydata").data(testData, (d) => d.id);
+        exitFun(circles);
+        enterFun(circles);
+        mergeFun(circles);
+    }
+
+    update(svg, testData)
     document.getElementById("btnRemove").onclick = function () {
         testData.splice(3, 1)
         console.log(testData)

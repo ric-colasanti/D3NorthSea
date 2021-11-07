@@ -11,7 +11,7 @@ var d3refresh = function () {
     for (let i = 0; i < 5; i++) {
         testData.push({
             "id": i,
-            "value": Math.floor(Math.random() * 50),
+            "value": Math.floor(Math.random() * 50+ 20),
             "xPos": Math.floor(Math.random() * 400),
             "yPos": Math.floor(Math.random() * 400)
         });
@@ -22,15 +22,18 @@ var d3refresh = function () {
     height = parseInt(svg.style("height"))
     counter = 5
 
+    function translate(d) {
+        return "translate(" + d.xPos + "," + d.yPos + ")";
+      }
 
     var enterFun = function(d3Array){
-        d3Array.enter()
+        const grp = d3Array.enter()
         .append("svg")
         .append("g")
         .attr("class","mydata")
+        grp
+        .attr("transform",translate)
         .append("circle")
-        .attr("cy", d => d.xPos)
-        .attr("cx", d => d.yPos)
         .on("click", function () {
             console.log("clicked")
             d3.select(this).attr("fill", "green")
@@ -39,8 +42,12 @@ var d3refresh = function () {
         .attr("stroke", "black")
         .transition().duration(1000)
         .attr("r", d => d.value)
+        grp
+        .append("text")
+        .text(d=>d.id)
     }
     var exitFun = function(d3Array){
+        d3Array.exit().select("text").text("")
         d3Array.exit()
         .select("circle")
         .transition()
@@ -50,11 +57,8 @@ var d3refresh = function () {
     }
     var mergeFun = function(d3Array){
         d3Array.merge(d3Array)
-        .select("circle")
         .transition().duration(1000)
-        .attr("cy", d => d.xPos)
-        .attr("cx", d => d.yPos)
-        .attr("r", d => d.value)
+        .attr("transform",translate)
     }
 
 
@@ -78,7 +82,7 @@ var d3refresh = function () {
         counter++
         testData.push({
             "id": counter,
-            "value": Math.floor(Math.random() * 50),
+            "value": Math.floor(Math.random() * 50 + 20),
             "xPos": Math.floor(Math.random() * 400),
             "yPos": Math.floor(Math.random() * 400)
         })

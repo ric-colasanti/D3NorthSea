@@ -44,6 +44,8 @@ var d3graph = function () {
         .append("g")
         .attr("transform",
             `translate(${margin.left}, ${margin.top})`);
+
+            
             let zoom = d3
             .zoom()
             .scaleExtent([0.05, 20])

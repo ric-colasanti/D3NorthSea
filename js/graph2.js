@@ -49,6 +49,8 @@ var d3graph2 = function () {
         height = 600 - margin.top - margin.bottom;
         const svg = d3.select("#my_dataviz")
         .append("svg")
+        .style("border-style","solid")
+        .style("border-width","1px")
         .call(zoom)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)

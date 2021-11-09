@@ -1,4 +1,4 @@
-var d3graph = function () {
+var d3graph2 = function () {
 
     function randInt(max) {
         return Math.floor((Math.random() * max))
@@ -28,6 +28,16 @@ var d3graph = function () {
         })
     }
     console.log(data);
+
+    let zoom = d3.zoom()
+	.on('zoom', handleZoom);
+
+    function handleZoom(e) {
+        d3.select('svg g')
+            .attr('transform', e.transform);
+    }
+    
+
     // set the dimensions and margins of the graph
     const margin = {
             top: 10,
@@ -39,29 +49,12 @@ var d3graph = function () {
         height = 600 - margin.top - margin.bottom;
         const svg = d3.select("#my_dataviz")
         .append("svg")
+        .call(zoom)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform",
             `translate(${margin.left}, ${margin.top})`);
-
-            
-            let zoom = d3
-            .zoom()
-            .scaleExtent([0.05, 20])
-            .translateExtent([
-                [0, 0],
-                [width, height]
-            ])
-            .on("zoom", () => {
-                svg.select("#view").attr("transform", d3.event.transform);
-                xGroup.call(xAxis.scale(d3.event.transform.rescaleX(xScale)));
-                yGroup.call(yAxis.scale(d3.event.transform.rescaleY(yScale)));
-            });
-        svg.call(zoom);
-        
-
-
     function update() {
         // append the svg object to the body of the page
         document.getElementById("btnChange").className = "btn btn-secondary"
@@ -89,15 +82,13 @@ var d3graph = function () {
             enter => enter
             .append("circle")
             .attr("r", 0)
-            .attr("cy",height/2)
-            .attr("cx",width/2)
+            .attr("cy",0)
+            .attr("cx",0)
             .style("fill", function (d) {
             return d.linked ? "blue" : "orange"
             }),
             update=>
-            update
-            .transition().duration(1000)
-            .style("fill", function (d) {
+            update.style("fill", function (d) {
                 return d.linked ? "blue" : "orange"
                 })
             .raise(),
@@ -124,7 +115,9 @@ var d3graph = function () {
         
         // This function is run at each iteration of the force algorithm, updating the nodes position.
         function ticked() {
-
+            for (let i = 0; i < 50; i++) {
+                simulation.tick();
+              }
             node
                 .attr("r", d=>d.size)
                 .attr("cx", function (d) {
@@ -163,7 +156,7 @@ var d3graph = function () {
         addData()
         update()
     }
-    
+
     update()
 
 }

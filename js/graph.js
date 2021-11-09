@@ -71,8 +71,8 @@ var d3graph = function () {
             enter => enter
             .append("circle")
             .attr("r", 0)
-            .attr("cy",0)
-            .attr("cx",0)
+            .attr("cy",height/2)
+            .attr("cx",width/2)
             .style("fill", function (d) {
             return d.linked ? "blue" : "orange"
             }),

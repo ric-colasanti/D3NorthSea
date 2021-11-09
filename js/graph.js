@@ -135,7 +135,6 @@ var d3graph = function () {
         .attr("cy", function (d) {
           return d.y;
         });
-
       link
         .attr("x1", function (d) {
           return d.source.x;
@@ -176,6 +175,5 @@ var d3graph = function () {
     addData();
     update();
   };
-
   update();
 };

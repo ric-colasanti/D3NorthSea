@@ -78,21 +78,17 @@ var d3graphreader = function () {
     var node_dict = {}
     for (var i = 0; i < nodes.length; i++) {
         addNode(i, nodes[i], 4)
-        //console.log(nodes[i]);
         node_dict[nodes[i]] = i
     }
-    //console.log(node_dict)
     for (var i = 0; i < link_data.length; i++) {
         links = link_data[i][0].split("-")
         node_from = node_dict[links[0]]
         node_to = node_dict[links[1]]
-        //console.log(node_from, node_to)
         addLink(i, node_from, node_to, parseFloat(link_data[i][2]))
     }
 
 
-    let zoom = d3.zoom().on("zoom", handleZoom);
-;
+    let zoom = d3.zoom().on("zoom", handleZoom);;
 
     function handleZoom(e) {
         d3.select("svg g").attr("transform", e.transform);
@@ -108,6 +104,8 @@ var d3graphreader = function () {
         width = 600 - margin.left - margin.right,
         height = 600 - margin.top - margin.bottom;
 
+
+
     const svg = d3
         .select("#network_viz")
         .append("svg")
@@ -118,14 +116,24 @@ var d3graphreader = function () {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", `translate(${margin.left}, ${margin.top})`);
-    
+
+    svg.append("svg:defs").selectAll("marker")
+        .data(["end"]) // Different link/path types can be defined here
+        .enter().append("svg:marker") // This section adds in the arrows
+        .attr("id", String)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 11)
+        .attr("refY", 0)
+        .attr("markerWidth", 6)
+        .attr("markerHeight", 6)
+        .attr("orient", "auto")
+        .append("svg:path")
+        .attr("d", "M0,-5L10,0L0,5");
+
 
 
     function update(flag) {
-        // append the svg object to the body of the page
-        //document.getElementById("btnChange").className = "btn btn-secondary";
-        //document.getElementById("btnChange").disabled = true;
-
+  
         // Initialize the links
         const link = svg
             .selectAll("line")
@@ -134,9 +142,9 @@ var d3graphreader = function () {
                 (enter) =>
                 enter
                 .append("line")
-                //.style("stroke", "white")
+                .style("stroke", "white")
                 .style("stroke-width", (d) => d.strength * 4)
-                .attr('marker-end', 'url(#arrowhead)'),
+                .attr("marker-end", "url(#end)"),
                 (update) => update.style("stroke-width", (d) => d.strength * 4),
                 (exit) => exit.remove()
             );
@@ -197,11 +205,7 @@ var d3graphreader = function () {
                 )
                 .force("charge", d3.forceManyBody().strength(-200)) // This adds repulsion between nodes. Play with the -400 for the repulsion strength
                 .force("center", d3.forceCenter(width / 2, height / 2))
-                .on("tick", ticked)
-                .on("end", function () {
-                    //document.getElementById("btnChange").disabled = false;
-                   // document.getElementById("btnChange").className = "btn btn-primary";
-                });
+                .on("tick", ticked);
 
             // This function is run at each iteration of the force algorithm, updating the nodes position.
 
@@ -243,32 +247,29 @@ var d3graphreader = function () {
     }
     var year = 1
     document.getElementById("year").innerHTML = years[year].toString()
-        
+
     function changeData(c) {
-        year+=c
-        if(year <1){
+        year += c
+        if (year < 1) {
             year = 1
         }
-        if(year>years.length){
+        if (year > years.length) {
             year = years.length
         }
         document.getElementById("year").innerHTML = years[year].toString()
-        
+
 
         for (var i = 0; i < link_data.length; i++) {
-            console.log(year);
             data.links[i].strength = parseFloat(link_data[i][year])
         }
     }
     document.getElementById("btnFoward").onclick = function () {
         changeData(1);
-        update(0);
-        //document.getElementById("btnChange").disabled = false;
+        update(1);
     };
     document.getElementById("btnBack").onclick = function () {
         changeData(-1);
-        update(0);
-        //document.getElementById("btnChange").disabled = false;
+        update(1);
     };
     update(1);
 };

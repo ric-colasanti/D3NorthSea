@@ -1,5 +1,5 @@
 var testfun = function () {
-    console.log("test")
+    //console.log("test")
 }
 
 var mainfun = function () {

@@ -248,6 +248,15 @@ var d3graphreader = function () {
     var year = 1
     document.getElementById("year").innerHTML = years[year].toString()
 
+    function showYear(year){
+        console.log("show");
+        document.getElementById("year").innerHTML = years[year].toString()
+
+
+        for (var i = 0; i < link_data.length; i++) {
+            data.links[i].strength = parseFloat(link_data[i][year])
+        }
+    }
     function changeData(c) {
         year += c
         if (year < 1) {
@@ -256,20 +265,158 @@ var d3graphreader = function () {
         if (year > years.length) {
             year = years.length
         }
-        document.getElementById("year").innerHTML = years[year].toString()
-
-
-        for (var i = 0; i < link_data.length; i++) {
-            data.links[i].strength = parseFloat(link_data[i][year])
-        }
+        showYear(year)
     }
     document.getElementById("btnFoward").onclick = function () {
         changeData(1);
-        update(1);
+        update(0);
     };
     document.getElementById("btnBack").onclick = function () {
         changeData(-1);
-        update(1);
+        update(0);
     };
     update(1);
+    var f2000 = false
+    var f2001 = false
+    var f2002 = false
+    var f2003 = false
+    var f2004 = false
+    var f2005 = false
+    var f2006 = false
+    var f2007 = false
+    var f2008 = false
+    var f2009 = false
+    var f2010 = false
+    var f2011 = false
+    var f2012 = false
+    var f2013 = false
+    var f2014 = false
+    var f2015 = false
+    var f2016 = false
+    var f2017 = false
+    var f2018 = false
+    var f2019 = false
+
+    function setMkr(){
+        f2000 = false
+        f2001 = false
+        f2002 = false
+        f2003 = false
+        f2004 = false
+        f2005 = false
+        f2006 = false
+        f2007 = false
+        f2008 = false
+        f2009 = false
+        f2010 = false
+        f2011 = false
+        f2012 = false
+        f2013 = false
+        f2014 = false
+        f2015 = false
+        f2016 = false
+        f2017 = false
+        f2018 = false
+        f2019 = false
+    }
+
+
+    window.addEventListener("scroll", function () {
+
+        ld2000 = document.getElementById("btn2000").getBoundingClientRect().top
+        ld2001 = document.getElementById("btn2001").getBoundingClientRect().top
+        ld2002 = document.getElementById("btn2002").getBoundingClientRect().top
+        ld2003 = document.getElementById("btn2003").getBoundingClientRect().top
+        ld2004 = document.getElementById("btn2004").getBoundingClientRect().top
+        ld2005 = document.getElementById("btn2005").getBoundingClientRect().top
+        ld2006 = document.getElementById("btn2006").getBoundingClientRect().top
+        ld2007 = document.getElementById("btn2007").getBoundingClientRect().top
+        ld2008 = document.getElementById("btn2008").getBoundingClientRect().top
+        ld2009 = document.getElementById("btn2009").getBoundingClientRect().top
+        ld2010 = document.getElementById("btn2010").getBoundingClientRect().top
+        // ld2011 = document.getElementById("btn2011").getBoundingClientRect().top
+        // ld2012 = document.getElementById("btn2012").getBoundingClientRect().top
+        // ld2013 = document.getElementById("btn2013").getBoundingClientRect().top
+        // ld2014 = document.getElementById("btn2014").getBoundingClientRect().top
+        // ld2015 = document.getElementById("btn2015").getBoundingClientRect().top
+        // ld2016 = document.getElementById("btn2016").getBoundingClientRect().top
+        // ld2017 = document.getElementById("btn2017").getBoundingClientRect().top
+        // ld2018 = document.getElementById("btn2018").getBoundingClientRect().top
+        // ld2019 = document.getElementById("btn2019").getBoundingClientRect().top
+        xList = document.getElementById("network_viz").getBoundingClientRect().top
+        // console.log(ld2001,xList);
+        if ((ld2000 >= xList)&&(!f2000)) {
+            setMkr()
+            console.log("Here")
+            showYear(1)
+            update(0);
+            f2000 = true       }
+        if ((ld2001 <= xList)&&(!f2001)) {
+            console.log("Here")
+            showYear(2)
+            update(0);
+            f2001 = true
+            f2000 = false
+        }
+        if ((ld2002 <= xList)&&(!f2002)) {
+            console.log("Here")
+            showYear(3)
+            update(0);
+            f2002 = true
+        }
+        if ((ld2003 <= xList)&&(!f2003)) {
+            console.log("Here")
+            showYear(4)
+            update(0);
+            f2003 = true
+        }
+        if ((ld2003 <= xList)&&(!f2003)) {
+            console.log("Here")
+            showYear(5)
+            update(0);
+            f2003 = true
+        }       
+        if ((ld2004 <= xList)&&(!f2004)) {
+            console.log("Here")
+            showYear(6)
+            update(0);
+            f2004 = true
+        }        
+        if ((ld2005 <= xList)&&(!f2005)) {
+            console.log("Here")
+            showYear(7)
+            update(0);
+            f2005 = true
+        }       
+        if ((ld2006 <= xList)&&(!f2006)) {
+            console.log("Here")
+            showYear(8)
+            update(0);
+            f2006 = true
+        }        
+        if ((ld2007 <= xList)&&(!f2007)) {
+            console.log("Here")
+            showYear(9)
+            update(0);
+            f2007 = true
+        }        
+        if ((ld2008 <= xList)&&(!f2008)) {
+            console.log("Here")
+            showYear(10)
+            update(0);
+            f2008 = true
+        }        
+        if ((ld2009 <= xList)&&(!f2009)) {
+            console.log("Here")
+            showYear(11)
+            update(0);
+            f2009 = true
+        }        
+        if ((ld2010 <= xList)&&(!f2010)) {
+            console.log("Here")
+            showYear(12)
+            update(0);
+            f2010 = true
+        }           
+    });
 };

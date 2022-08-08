@@ -39,7 +39,7 @@ var d3refresh = function () {
         .text(d=>d.id)
     }
     var exitFun = function(d3Array){
-        d3Array.exit().select("text").text("")
+        d3Array.exit().select("text").remove()
         d3Array.exit()
         .select("circle")
         .transition()

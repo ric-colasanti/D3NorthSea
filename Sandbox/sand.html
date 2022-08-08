@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Sand</title>
+  </head>
+  <body>
+    <div class="container">
+        <svg id="chart" style="border-style: solid; width : 450px;height : 450px;"></svg>
+    </div> 
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+    <script>
+        var testData = []
+        for (let i = 0; i < 5; i++) {
+            testData.push({
+                "id": i,
+                "value": Math.floor(Math.random() * 50+ 20),
+                "xPos": Math.floor(Math.random() * 400),
+                "yPos": Math.floor(Math.random() * 400)
+            });
+        } 
+       
+        function translate(d) {
+            return "translate(" + d.xPos + "," + d.yPos + ")";
+        }
+
+        var svg = d3.select("#chart");
+        
+        function enter(d3Data){
+            // add svg group and place it
+            const group = d3Data.enter()
+            .append("svg")
+            .append("g")
+            .attr("class","nodedata")
+            .attr("transform",translate)
+
+            // add circle to group
+            group.append("circle")
+            .attr("r", d => d.value)
+            .attr("fill","green")
+
+            //add text to group
+            group.attr("stroke","black")
+            .append("text")
+            .text(d=>d.id)
+        }
+
+        function update(svg){
+            const circles = svg.selectAll("g").filter(".nodedata").data(testData, (d) => d.id);
+            enter(circles)
+        }
+
+        update(svg)
+    </script>
+  </body>
+</html>

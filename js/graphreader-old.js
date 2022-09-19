@@ -61,9 +61,8 @@ var d3graphreader = function () {
         data.nodes.push({
             id: id,
             name: name,
-            size: 500,
-            color: "#44ff00",
-            img: "https://placekitten.com/g/48/48"
+            size: 700,
+            color: "#ff0000"
         });
     }
 
@@ -151,35 +150,18 @@ var d3graphreader = function () {
             );
         // Initialize the nodes
         const node = svg
-            .selectAll("image")
+            .selectAll("circle")
             .data(data.nodes, (d) => d.id)
             .join(
                 (enter) =>
                 enter
-                .append("image")
-                .attr("xlink:href",  function(d) { return d.img;})
-                .attr("x",0)
-                .attr("y",0)
-                .attr("width", 16)
-      .attr("height", 16)
-      .on( 'mouseenter', function() {
-        // select element in current context
-        d3.select( this )
-          .transition()
-          .attr("x", function(d) { return d.x - 60;})
-          .attr("y", function(d) { return d.y - 60;})
-          .attr("height", 100)
-          .attr("width", 100);
-      })
-      // set back
-      .on( 'mouseleave', function() {
-        d3.select( this )
-          .transition()
-          .attr("x", function(d) { return d.x -8;})
-          .attr("y", function(d) { return d.y -8;})
-          .attr("height", 16)
-          .attr("width", 16);
-      }),
+                .append("circle")
+                .attr("r", 30)
+                .attr("cy", 0)
+                .attr("cx", 0)
+                .style("fill", function (d) {
+                    return d.color;
+                }),
                 (update) =>
                 update
                 .style("fill", function (d) {
@@ -233,11 +215,11 @@ var d3graphreader = function () {
                 }
                 node
                     .attr("r", (d) => d.size)
-                    .attr("x", function (d) {
-                        return d.x-8;
+                    .attr("cx", function (d) {
+                        return d.x;
                     })
-                    .attr("y", function (d) {
-                        return d.y-8;
+                    .attr("cy", function (d) {
+                        return d.y;
                     });
                 link
                     .attr("x1", function (d) {

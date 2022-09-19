@@ -63,7 +63,7 @@ var d3graphreader = function () {
             name: name,
             size: 500,
             color: "#44ff00",
-            img: "https://placekitten.com/g/48/48"
+            img: "https://www.shareicon.net/data/128x128/2016/06/28/787804_animal_512x512.png"
         });
     }
 
@@ -160,8 +160,8 @@ var d3graphreader = function () {
                 .attr("xlink:href",  function(d) { return d.img;})
                 .attr("x",0)
                 .attr("y",0)
-                .attr("width", 16)
-      .attr("height", 16)
+                .attr("width", 30)
+      .attr("height", 30)
       .on( 'mouseenter', function() {
         // select element in current context
         d3.select( this )
@@ -175,10 +175,10 @@ var d3graphreader = function () {
       .on( 'mouseleave', function() {
         d3.select( this )
           .transition()
-          .attr("x", function(d) { return d.x -8;})
-          .attr("y", function(d) { return d.y -8;})
-          .attr("height", 16)
-          .attr("width", 16);
+          .attr("x", function(d) { return d.x -15;})
+          .attr("y", function(d) { return d.y -15;})
+          .attr("height", 30)
+          .attr("width", 30);
       }),
                 (update) =>
                 update
@@ -234,10 +234,10 @@ var d3graphreader = function () {
                 node
                     .attr("r", (d) => d.size)
                     .attr("x", function (d) {
-                        return d.x-8;
+                        return d.x-15;
                     })
                     .attr("y", function (d) {
-                        return d.y-8;
+                        return d.y-15;
                     });
                 link
                     .attr("x1", function (d) {

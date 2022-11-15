@@ -1,73 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@1,700&display=swap"
-      rel="stylesheet"
-    />
-    <title>Sand</title>
-  </head>
+<html>
+  <script src="https://d3js.org/d3.v4.js"></script>
   <body>
-    <div class="container">
-        <svg id="chart" style="border-style: solid; width : 450px;height : 450px;"></svg>
-    </div> 
+    <h2>D3.js Scatter-Plot</h2>
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-
+    <svg id="myPlot" style="width: 500px; height: 500px"></svg>
 
     <script>
-        var testData = []
-        for (let i = 0; i < 5; i++) {
-            testData.push({
-                "id": i,
-                "value": Math.floor(Math.random() * 50+ 20),
-                "xPos": Math.floor(Math.random() * 400),
-                "yPos": Math.floor(Math.random() * 400)
-            });
-        } 
-       
-        function translate(d) {
-            return "translate(" + d.xPos + "," + d.yPos + ")";
-        }
+      // Set Dimensions
+      const xSize = 500;
+      const ySize = 500;
+      const margin = 40;
+      const xMax = xSize - margin * 2;
+      const yMax = ySize - margin * 2;
 
-        var svg = d3.select("#chart");
-        
-        function enter(d3Data){
-            // add svg group and place it
-            const group = d3Data.enter()
-            .append("svg")
-            .append("g")
-            .attr("class","nodedata")
-            .attr("transform",translate)
+      // Create Random Points
+      const numPoints = 100;
+      const data = [];
+      for (let i = 0; i < numPoints; i++) {
+        data.push([Math.random() * xMax, Math.random() * yMax]);
+      }
 
-            // add circle to group
-            group.append("circle")
-            .attr("r", d => d.value)
-            .attr("fill","green")
+      // Append SVG Object to the Page
+      const svg = d3
+        .select("#myPlot")
+        .append("svg")
+        .append("g")
+        .attr("transform", "translate(" + margin + "," + margin + ")");
 
-            //add text to group
-            group.attr("stroke","black")
-            .append("text")
-            .text(d=>d.id)
-        }
+      // X Axis
+      const x = d3.scaleLinear().domain([0, 500]).range([0, xMax]);
 
-        function update(svg){
-            const circles = svg.selectAll("g").filter(".nodedata").data(testData, (d) => d.id);
-            enter(circles)
-        }
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + yMax + ")")
+        .call(d3.axisBottom(x));
 
-        update(svg)
+      // Y Axis
+      const y = d3.scaleLinear().domain([0, 500]).range([yMax, 0]);
+
+      svg.append("g").call(d3.axisLeft(y));
+
+      // Dots
+      svg
+        .append("g")
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) {
+          return d[0];
+        })
+        .attr("cy", function (d) {
+          return d[1];
+        })
+        .attr("r", 3)
+        .style("fill", "Red");
     </script>
   </body>
 </html>

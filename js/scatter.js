@@ -1,18 +1,18 @@
-var d3refresh = function () {
+var d3scatter = function () {
+    console.log("scatter");
     var testData = []
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 100; i++) {
         testData.push({
             "id": i,
-            "value": Math.floor(Math.random() * 50+ 20),
-            "xPos": Math.floor(Math.random() * 400),
-            "yPos": Math.floor(Math.random() * 400)
+            "xPos": Math.floor(Math.random() * 500),
+            "yPos": Math.floor(Math.random() * 500)
         });
     }
     console.log(testData)
     var svg = d3.select("#chart");
     width = parseInt(svg.style("width"));
     height = parseInt(svg.style("height"))
-    counter = 5
+
 
     function translate(d) {
         return "translate(" + d.xPos + "," + d.yPos + ")";
@@ -20,23 +20,19 @@ var d3refresh = function () {
 
     var enterFun = function(d3Array){
         const grp = d3Array.enter()
-        .append("svg")
-        .append("g")
-        .attr("class","nodedata")
-        grp
-        .attr("transform",translate)
+        // .append("svg")
+        // .append("g")
+        // .attr("class","nodedata")
+        // grp
+        // .attr("transform",translate)
         .append("circle")
         .on("click", function () {
             console.log("clicked")
             d3.select(this).attr("fill", "green")
-        })
-        .attr("fill", "tomato")
-        .attr("stroke", "black")
-        .transition().duration(1000)
-        .attr("r", d => d.value)
-        grp
-        .append("text")
-        .text(d=>d.id)
+        })     
+        .attr("r", 8)
+        .style("fill", "Red")
+
     }
     var exitFun = function(d3Array){
         d3Array.exit().select("text").remove()
@@ -65,23 +61,25 @@ var d3refresh = function () {
 
     update(svg, testData)
     document.getElementById("btnRemove").onclick = function () {
+        console.log("remove");
         testData.splice(3, 1)
         console.log(testData)
         update(svg, testData)
     }
     document.getElementById("btnAdd").onclick = function () {
+        console.log("add");
         randomNum = Math.round(Math.random() * 50); // 0 to 100
         console.log(randomNum);
-        counter++
+        //counter++
         testData.push({
-            "id": counter,
-            "value": Math.floor(Math.random() * 50 + 20),
+            "id": 101,
             "xPos": Math.floor(Math.random() * 400),
             "yPos": Math.floor(Math.random() * 400)
         })
         update(svg, testData)
     }
     document.getElementById("btnChange").onclick = function () {
+        console.log("Change");
         testData.forEach(function (d) {
             d.xPos = Math.floor(Math.random() * 400);
             d.yPos = Math.floor(Math.random() * 400);

@@ -23,8 +23,8 @@ var d3refresh = function () {
         .append("svg")
         .append("g")
         .attr("class","nodedata")
-        grp
         .attr("transform",translate)
+        grp
         .append("circle")
         .on("click", function () {
             console.log("clicked")
@@ -39,35 +39,75 @@ var d3refresh = function () {
         .text(d=>d.id)
     }
     var exitFun = function(d3Array){
-        d3Array.exit().select("text").remove()
+        d3Array.exit().transition()
+        .duration(900)
+        .remove()
         d3Array.exit()
         .select("circle")
         .transition()
         .duration(1000)
         .attr("r", 0)
-        .remove()
     }
     var mergeFun = function(d3Array){
-        d3Array.merge(d3Array)
+        d3Array.merge(d3Array)      
         .transition().duration(1000)
         .attr("transform",translate)
-        .attr("fill", "green")
     }
 
 
 
     var update = function (svg, gData) {
+        console.log("Update");
         const circles = svg.selectAll("g").filter(".nodedata").data(gData, (d) => d.id);
         exitFun(circles);
         enterFun(circles);
         mergeFun(circles);
     }
 
-    update(svg, testData)
+    var updateNew =function(svg,gData){
+        console.log("UpdateNew");
+        
+        const circles = svg.selectAll("g").filter(".nodedata").data(gData, (d) => d.id);
+        circles.join(
+            (enter) =>{
+              const grp = enter.append("svg")
+              .append("g")
+              .attr("class","nodedata")
+              .attr("transform",translate);
+              grp.append("circle")
+              .on("click", function () {
+                  console.log("clicked")
+                  d3.select(this).attr("fill", "green")
+              })
+              .attr("fill", "tomato")
+              .attr("stroke", "black")
+              .transition().duration(1000)
+              .attr("r", d => d.value); 
+
+              grp.append("text")
+              .text(d=>d.id);
+            },
+            (update) => {
+                update.transition().duration(1000)
+                .attr("transform",translate)
+            },
+            (exit) => {
+                exit.transition()
+                .duration(900)
+                .remove();
+                exit.select("circle")
+                .transition()
+                .duration(1000)
+                .attr("r", 0)
+            }
+          );   
+    }
+
+    updateNew(svg, testData)
     document.getElementById("btnRemove").onclick = function () {
         testData.splice(3, 1)
         console.log(testData)
-        update(svg, testData)
+        updateNew(svg, testData)
     }
     document.getElementById("btnAdd").onclick = function () {
         randomNum = Math.round(Math.random() * 50); // 0 to 100
@@ -79,13 +119,13 @@ var d3refresh = function () {
             "xPos": Math.floor(Math.random() * 400),
             "yPos": Math.floor(Math.random() * 400)
         })
-        update(svg, testData)
+        updateNew(svg, testData)
     }
     document.getElementById("btnChange").onclick = function () {
         testData.forEach(function (d) {
             d.xPos = Math.floor(Math.random() * 400);
             d.yPos = Math.floor(Math.random() * 400);
         })
-        update(svg, testData)
+        updateNew(svg, testData)
     }
 }

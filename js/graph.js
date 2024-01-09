@@ -84,7 +84,7 @@ var d3graph = function () {
       .selectAll("circle")
       .data(data.nodes, (d) => d.id)
       .join(
-        (enter) =>
+        (enter) =>{
           enter
             .append("circle")
             .attr("r", 0)
@@ -92,7 +92,8 @@ var d3graph = function () {
             .attr("cx", 0)
             .style("fill", function (d) {
               return d.linked ? "blue" : "orange";
-            }),
+            });
+          console.log("here");},
         (update) =>
           update
             .style("fill", function (d) {
